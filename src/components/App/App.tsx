@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from '../Header';
-import Button from '../Button';
+import Button from '../../shared/Button';
 import './App.css';
+import Container from '../../shared/Container';
 
 function TestComponent() {
   return <img 
@@ -16,14 +17,14 @@ function App() {
     <div className="App">
       <Header title="AlgaStock" />
       
-      <div className="Container">
+      <Container>
         <Button 
           onClick={() => window.alert('UIIIU')}
           appendIcon={<TestComponent />}
         >
           Alert
         </Button>
-      </div>
+      </Container>
     </div>
   );
 }
