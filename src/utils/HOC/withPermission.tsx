@@ -1,5 +1,4 @@
-import { logRoles } from '@testing-library/react'
-import React, { Component, FC } from 'react'
+import React, { FC } from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { RootState } from '../../redux'

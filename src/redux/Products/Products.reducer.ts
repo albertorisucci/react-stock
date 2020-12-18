@@ -1,4 +1,4 @@
-import Products, { Product } from "../../shared/Table/Table.mockdata"
+import { Product } from "../../shared/Table/Table.mockdata"
 import { Action } from ".."
 
 export default function (state: Product[] = [], action: Action): Product[] {
