@@ -1,7 +1,10 @@
 import React from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 import organizeData from '../../utils/organizeDataForTable'
 import Button from '../Button'
 import './Table.scss'
+import { parse } from 'query-string'
+import paginate from '../../utils/paginate'
 
 export interface TableHeader {
   key: string
@@ -15,15 +18,26 @@ declare interface TableProps {
 
   enableActions?: boolean
 
+  itemsPerPage?: number
+
   onDelete?: (item: any) => void
   onDetail?: (item: any) => void
   onEdit?: (item: any) => void
 }
 
 const Table: React.FC<TableProps> = (props) => {
+  const itemsPerPage = props.itemsPerPage || 5
+  const location = useLocation()
+  const page = parseInt(
+      parse(location.search).page as string
+      ) || 1
+  
   const [organizedData, indexedHeaders] = organizeData(props.data, props.headers)
+  const paginatedData = paginate(organizedData, itemsPerPage, page)
+  const totalPages = Math.ceil(organizedData.length / itemsPerPage)
 
-  return <table className="AppTable">
+  return <>
+  <table className="AppTable">
     <thead>
       <tr>
         {
@@ -46,7 +60,7 @@ const Table: React.FC<TableProps> = (props) => {
     </thead>
     <tbody>
       {
-        organizedData.map((row, i) => {
+        paginatedData.map((row, i) => {
           return <tr key={i}>
             {
               Object
@@ -94,6 +108,23 @@ const Table: React.FC<TableProps> = (props) => {
       }
     </tbody>
   </table>
+  <div className="Table__pagination">
+    {
+      Array(totalPages)
+        .fill('')
+        .map((_, i) => {
+          return <NavLink
+            key={i}
+            activeClassName="selected"
+            to={`/products?page=${i + 1}`}
+            isActive={() => page === i + 1}
+          >
+            { i + 1 }
+          </NavLink>
+        })
+    }
+  </div>
+  </>
 }
 
 export default Table

@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom' 
-import HomeView from '../../view/HomeView';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom' 
+import ProductsView from '../../view/ProductsView';
 import LoginView from '../../view/LoginView';
 import NotFoundView from '../../view/NotFoundView';
 import ProfileView from '../../view/ProfileView';
@@ -11,7 +11,10 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route path="/" exact component={HomeView} />
+          <Route path="/" exact>
+            <Redirect to="/products" />
+          </Route>
+          <Route path="/products" exact component={ProductsView} />
           <Route path="/login" exact component={LoginView} />
           <Route path="/profile" exact component={ProfileView} />
           <Route component={NotFoundView} />
