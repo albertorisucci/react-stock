@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import { connect, useDispatch } from 'react-redux'
 import * as ProductsAction from '../../redux/Products/Products.actions'
 import { RootState, ThunkDispatch } from '../../redux'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 const headers: TableHeader[] = [
   { key: 'id', value: '#' },
@@ -20,11 +21,22 @@ declare interface ProductsCRUDProps {
 
 const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
   const dispatch: ThunkDispatch = useDispatch()
+  const params = useParams<{ id?: string }>()
+  const history = useHistory()
+  const location = useLocation()
 
   const showErrorAlert =
     (err: Error) => Swal.fire('Oops!', err.message, 'error')
 
   const [updatingProduct, setUpdatingProduct] = useState<Product | undefined>(undefined)
+
+  useEffect(() => {
+    setUpdatingProduct(
+      params.id 
+        ? props.products.find(product => product._id === params.id)
+        : undefined
+    )
+  }, [params, props.products])
   
   useEffect(() => {
     fetchData()
@@ -84,7 +96,12 @@ const ProductsCRUD: React.FC<ProductsCRUDProps> = (props) => {
       enableActions
       onDelete={handleProductDelete}
       onDetail={handleProductDetail}
-      onEdit={setUpdatingProduct}
+      onEdit={product => {
+        history.push({
+          pathname: `/products/${product._id}`,
+          search: location.search
+        })
+      }}
       itemsPerPage={3}
     />
 
